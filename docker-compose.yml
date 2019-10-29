@@ -1,0 +1,57 @@
+version: '3'
+
+services:
+  nginx:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    ports:
+      - '3050:80'
+    restart: always
+  postgres:
+    image: 'postgres:latest'
+  redis:
+    image: 'redis:latest'
+  # call this service api to staisfy nginx constraints (do not use the word server)
+  api:
+    build:
+      # specify the name of the docker file
+      dockerfile: Dockerfile.dev
+      # specify where to look for the docker file
+      context: ./server
+    volumes:
+      # don't try to override this folder
+      - /app/node_modules
+      # anytime our application wants to access anything inside of /app in our container, it will be redirected back to server directory inside our current project folder
+      # any changes inside /server will be reflected inside the app folder of our container
+      - ./server:/app
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PGUSER=postgres
+      - PGHOST=postgres
+      - PGDATABASE=postgres
+      - PGPASSWORD=postgres_password
+      - PGPORT=5432
+  client:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./client
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+  worker:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./worker
+    volumes:
+      - /app/node_modules
+      - ./worker:/app
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PGUSER=postgres
+      - PGHOST=postgres
+      - PGDATABASE=postgres
+      - PGPASSWORD=postgres_password
+      - PGPORT=5432
