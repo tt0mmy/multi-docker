@@ -13,14 +13,14 @@ after_success:
   - docker build -t ttanebatesdocker/multi-client ./client
   - docker build -t ttanebatesdocker/multi-nginx ./nginx
   - docker build -t ttanebatesdocker/multi-server ./server
-  - docker build -t ttanebatesdocker/multi-nginx ./nginx
+  - docker build -t ttanebatesdocker/multi-worker ./worker
   # log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # take images above and push them to docker hub
   - docker push ttanebatesdocker/multi-client
   - docker push ttanebatesdocker/multi-nginx
   - docker push ttanebatesdocker/multi-server
-  - docker push ttanebatesdocker/multi-nginx
+  - docker push ttanebatesdocker/multi-worker
 # deploy:
 #   provider: elasticbeanstalk
 #   region: 'us-west-2'
