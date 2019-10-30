@@ -15,7 +15,7 @@ after_success:
   - docker build -t ttanebatesdocker/multi-server ./server
   - docker build -t ttanebatesdocker/multi-nginx ./nginx
   # log in to the docker CLI
-  - echo "DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # take images above and push them to docker hub
   - docker push ttanebatesdocker/multi-client
   - docker push ttanebatesdocker/multi-nginx
