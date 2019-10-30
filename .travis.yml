@@ -1,0 +1,37 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  # look into the ./client to get the build context
+  - docker build -t ttanebatesdocker/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true ttanebatesdocker/react-test npm run test -- --coverage
+
+after_success:
+  - docker build -t ttanebatesdocker/multi-client ./client
+  - docker build -t ttanebatesdocker/multi-nginx ./nginx
+  - docker build -t ttanebatesdocker/multi-server ./server
+  - docker build -t ttanebatesdocker/multi-nginx ./nginx
+  # log in to the docker CLI
+  - echo "DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # take images above and push them to docker hub
+  - docker push ttanebatesdocker/multi-client
+  - docker push ttanebatesdocker/multi-nginx
+  - docker push ttanebatesdocker/multi-server
+  - docker push ttanebatesdocker/multi-nginx
+# deploy:
+#   provider: elasticbeanstalk
+#   region: 'us-west-2'
+#   app: 'docker-react'
+#   env: 'DockerReact-env'
+#   bucket_name: 'elasticbeanstalk-us-west-2-505975311648'
+#   bucket_path: 'docker-react'
+#   on:
+#     # only when code is pushed or merged to master, we deploy
+#     branch: master
+#   access_key_id:
+#     secure: $AWS_ACCESS_KEY
+#   secret_access_key:
+#     secure: '$AWS_SECRET_KEY'
