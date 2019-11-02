@@ -21,17 +21,17 @@ after_success:
   - docker push ttanebatesdocker/multi-nginx
   - docker push ttanebatesdocker/multi-server
   - docker push ttanebatesdocker/multi-worker
-# deploy:
-#   provider: elasticbeanstalk
-#   region: 'us-west-2'
-#   app: 'docker-react'
-#   env: 'DockerReact-env'
-#   bucket_name: 'elasticbeanstalk-us-west-2-505975311648'
-#   bucket_path: 'docker-react'
-#   on:
-#     # only when code is pushed or merged to master, we deploy
-#     branch: master
-#   access_key_id:
-#     secure: $AWS_ACCESS_KEY
-#   secret_access_key:
-#     secure: '$AWS_SECRET_KEY'
+deploy:
+  provider: elasticbeanstalk
+  region: 'us-west-1'
+  app: 'multi-docker'
+  env: 'MultiDocker-env'
+  bucket_name: 'elasticbeanstalk-us-west-1-505975311648'
+  bucket_path: 'docker-multi'
+  on:
+    # only when code is pushed or merged to master, we deploy
+    branch: master
+  access_key_id:
+    secure: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: '$AWS_SECRET_KEY'
