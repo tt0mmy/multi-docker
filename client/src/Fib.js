@@ -54,6 +54,7 @@ export default function Fib() {
 
   return (
     <div>
+    <h1>FIB Calculator</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor="index">Enter your Index:</label>
         <input value={String(state.index)} onChange={e => {
